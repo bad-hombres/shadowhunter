@@ -23,10 +23,14 @@ def get_suid_binaries():
 
 def is_redirect_for_suid(magic, suid):
     bytes_to_read = len(magic) / 2
-    with open(suid, "rb") as f:
-        tmp = binascii.hexlify(f.read(bytes_to_read)).lower()
-        if tmp == magic.lower():
-            return True
+    try:
+        with open(suid, "rb") as f:
+            tmp = binascii.hexlify(f.read(bytes_to_read)).lower()
+            if tmp == magic.lower():
+                return True
+    except:
+        print "[*] Cant read {}".format(suid)
+        return False
 
 def find_shadow_suids(binfmt_path):
     expected = ["register", "status"]
